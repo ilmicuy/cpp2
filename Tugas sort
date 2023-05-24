@@ -1,0 +1,133 @@
+//Nama : Muhammad Nur Ilmi
+//Nim  : 10520040
+#include <stdio.h>
+#include <conio.h>
+void input_jumlah_data(void);
+void input_data(void);
+void BSAsc(void); void BSDesc(void);
+void SSAsc(void); void SSDesc(void);
+int R[30],i,j,N,temp;
+int main() //awal program
+{
+    char pilih,bs,ss;
+    system("cls");
+    input_jumlah_data(); //fungsi untuk dipanggil
+    input_data();
+
+    printf("Sorting menggunakan: \n");
+    printf("1. Bubble Sort\n");
+    printf("2. Selection Sort\n");
+    printf("Masukan Pilihan Anda:");
+    scanf("%c", &pilih);
+    fflush(stdin);
+
+    switch(pilih)
+    {
+        case '1' : printf("Bubble Sort\n");
+        printf("1=Ascending 2=Descending : ");
+        scanf("%c", &bs); fflush(stdin);
+        switch(bs)
+        {
+            case '1' : BSAsc(); break;
+            case '2' : BSDesc(); break;
+        }
+        break;
+
+        case '2' : printf("Selection Sort");
+        printf("1=Ascending 2=Descending : ");
+        scanf("%c", &ss); fflush(stdin);
+        switch(ss)
+        {
+            case '1' : SSAsc(); break;
+            case '2' : SSDesc(); break;
+        }
+        break;
+    }
+    printf("\nSetelah data disorting menjadi :\n");
+        for(i=0;i<N;i++)
+        { printf("%3i",R[i]); };
+
+        getch();
+} //akhir program
+
+void input_jumlah_data(void) //definisi
+{ //validasi data jangan sampai lebih dari 30 data
+    do
+    {
+        printf("Banyak Data: "); scanf("%i", &N); fflush(stdin);
+    }while (N>30);
+}
+
+void input_data(void)
+{ //input sejumlah data sebanyak N
+    for(i=0;i<N;i++)
+    {
+        printf("Data ke -%i: ", i+1);
+        scanf("%i", &R[i]); fflush(stdin);
+    }
+}
+
+void BSAsc(void)
+{
+    for(i=0; i<N-1; i++)
+    {
+        for(j=0; j<N-1; j++)
+        {
+            if(R[j+1]<R[j])
+            {
+                temp=R[j];
+                R[j]=R[j+1];
+                R[j+1]=temp;
+            }
+        }
+    }
+}
+
+void BSDesc(void)
+{
+    for(i=0; i<N-1; i++)
+    {
+        for(j=0; j<N-1; j++)
+        {
+            if(R[j+1]>R[j])
+            {
+                temp=R[j];
+                R[j]=R[j+1];
+                R[j+1]=temp;
+            }
+        }
+    }
+}
+
+void SSAsc(void)
+{
+    for(i=0;i<(N-1);i++)
+    {
+   		for(j= i+1;j<N;j++)
+   		{
+    		if(R[i]>R[j])
+    		{
+     			temp=R[i];
+     			R[i]=R[j];
+    			R[j]=temp;
+    		}
+  		}
+    }
+
+}
+
+void SSDesc(void)
+{
+    for(i=0;i<(N-1);i++)
+    {
+   		for(j= i+1;j<N;j++)
+  		{
+    		if(R[i]<R[j])
+    		{
+     			temp=R[i];
+     			R[i]=R[j];
+     			R[j]=temp;
+    		}
+   		}
+    }
+}

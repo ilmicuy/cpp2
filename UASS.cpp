@@ -1,0 +1,190 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <conio.h>
+#include <string.h>
+#define PANJANG_NAMA 20
+#define PANJANG_NIM 10
+#define NILAI 10
+#define ENTER 13
+struct mahasiswa
+{
+char Nomor[PANJANG_NIM+1];
+char Nama[PANJANG_NAMA+1];
+char NIM[PANJANG_NIM+1];
+float Nilai_Akhir, Nilai_Quiz, Nilai_Tugas, Nilai_UTS, Nilai_UAS;
+float a,b,c,d,e;
+int Huruf;
+
+struct mahasiswa *lanjutan;
+};
+struct mahasiswa *ptr_kepala=NULL;
+struct mahasiswa *ptr_pos_data;
+struct mahasiswa *ptr_pendahulu;
+void pemasukan_data(void);
+void masukan_string(char *keterangan, char *masukan, int panjang_maks);
+void tampilkan_data(void);
+void menu_pilihan(void);
+void edit_data(void);
+void hapus_data(void);
+void Nilai_akhir(void);
+void Mencari_Data(void);
+
+main()
+{
+for(;;)
+{
+
+ menu_pilihan();
+}
+}
+void masukan_data(void)
+{ 
+         char jawaban;
+         struct mahasiswa *ptr_baru;
+ 
+         ptr_baru=(struct mahasiswa *)malloc(sizeof(struct mahasiswa));
+ 
+          if (ptr_baru)
+          {
+            masukan_string("\nNIM      : ",ptr_baru->NIM,PANJANG_NIM);
+            masukan_string("Nama Mahasiswa : ",ptr_baru->Nama,PANJANG_NAMA); 
+            printf("Nilai Tugas     : "); scanf("%d",&ptr_baru->Nilai_Quiz);
+            printf("Nilai Quiz      : "); scanf("%d",&ptr_baru->Nilai_Tugas);
+            printf("Nilai UTS       : "); scanf("%d",&ptr_baru->Nilai_UTS);
+            printf("Nilai UAS       : "); scanf("%d",&ptr_baru->Nilai_UAS);
+ 
+            ptr_baru->lanjutan=ptr_kepala;
+            ptr_kepala=ptr_baru;
+ 
+            ptr_baru->Nilai_Akhir=
+            (0.2*ptr_baru->Nilai_Quiz)+
+            (0.2*ptr_baru->Nilai_Tugas)+
+            (0.3*ptr_baru->Nilai_UAS)+
+            (0.3*ptr_baru->Nilai_UTS);
+            printf("Nilai Akhir adalah : %.2fn",ptr_baru->Nilai_Akhir); 
+
+            if (ptr_baru->Nilai_Akhir>=80) ptr_baru->Huruf='A';    
+            else if (ptr_baru->Nilai_Akhir>=68) ptr_baru->Huruf='B';
+            else if (ptr_baru->Nilai_Akhir>=45) ptr_baru->Huruf='C';
+            else if (ptr_baru->Nilai_Akhir>=31) ptr_baru->Huruf='D';
+            else ptr_baru->Huruf='E';
+
+            printf("\nIndeks Nilai Mahasiswa Atas Nama %s adalah  : %c",ptr_baru->Nama,ptr_baru->Huruf);
+
+            ptr_baru->lanjutan=ptr_kepala;
+            ptr_kepala=ptr_baru;
+            printf("\nMemasukan data lagi (Y/T) ? ");
+       do
+            {
+                jawaban=toupper(getche()); printf("\n");
+            }   while (!(jawaban=='Y' || jawaban=='T'));
+       }
+	   else
+	{
+	   puts("Memori tidak cukup..!");	
+   }
+       
+		}
+     
+        void masukan_string(char *keterangan, char *masukan, int panjang_maks)
+   {    char st[256];
+        do
+   {
+        printf(keterangan);
+        gets(st);
+        if (strlen(st)>panjang_maks)
+        printf("Terlalu panjang. Maks %d karakter\n",panjang_maks); 
+   } while (strlen(st)>panjang_maks);
+    strcpy(masukan,st);
+   }
+     void tampilkan_data(void)
+   { struct mahasiswa *ptr_sementara;
+     puts("\nIsi LINKED LIST :");
+     ptr_sementara=ptr_kepala;
+     while (ptr_sementara)
+   {
+     printf("Nomor NIM      %s\n",ptr_sementara->NIM);
+     printf("Nama Mahasiswa %s\n",ptr_sementara->Nama);
+     printf("Nilai Tugas     %s\n",ptr_sementara->Nomor);
+     printf("Nilai Quiz    %s\n",ptr_sementara->Nomor); 
+     printf("Nilai UTS      %s\n",ptr_sementara->Nomor); 
+     printf("Nilai UAS      %s\n",ptr_sementara->Nomor); 
+     printf("Nilai Akhir    %s\n",ptr_sementara->Nilai_Akhir); 
+     ptr_sementara=ptr_sementara->lanjutan;
+   }
+     printf("\n\nTEKAN ENTER untuk kembali ke Menu Pilihan...!");
+     getch();
+   }
+     void cari_data(char *nama)
+   {
+     ptr_pendahulu=NULL;
+     ptr_pos_data=ptr_kepala;
+     while (ptr_pos_data)
+   {
+     if (strcmp(nama,ptr_pos_data->Nama)!=0)
+   {
+     ptr_pendahulu=ptr_pos_data;
+     ptr_pos_data=ptr_pos_data->lanjutan;
+   }else
+   {
+   break;
+   }
+ }
+}
+   void hapus_data(void)
+   {
+        char nama[21];
+        masukan_string("Masukan nama yang akan dihapus : ",nama,20);
+        cari_data(nama);
+        if (ptr_pos_data==NULL)
+        puts("Nama tidak ditemukan...!");
+        else
+   { 
+       if (ptr_pendahulu==NULL)
+       ptr_kepala=ptr_kepala->lanjutan;
+       else
+       ptr_pendahulu->lanjutan=ptr_pos_data->lanjutan;
+       free(ptr_pos_data); 
+       puts("OK..penghapusan telah selesai..tekan ENTER...!");
+       getch();
+   }
+   }
+    void Mencari_Data(void)
+   {
+       char Nim[21];
+       masukan_string("Masukan Nim yang dicari : ",Nim,20);
+       cari_data(Nim);
+       if (ptr_pos_data==NULL)
+       puts("Nim tidak ditemukan...!");
+       getch();
+   }
+
+   void menu_pilihan(void)
+   { char pilihan;
+     puts("MENU PILIHAN");
+     puts("1.Input Data");
+     puts("2.Menghapus Data");
+     puts("3.Menampilkan data");
+     puts("4.Mengedit Data");
+     puts("5.Mencari Data");
+     puts("6.SELESAI");
+     printf("Pilihan 1/2/3/4/5/6 = ");
+     do
+   {
+     pilihan=getche(); fflush(stdin); printf("\n");
+   }while (pilihan < '1' || pilihan > '6');
+    switch (pilihan)
+   {
+    case '1' : masukan_data(); break;
+    case '2' : hapus_data(); break;
+    case '4' : edit_data(); break;
+    case '3' : tampilkan_data(); break;
+    case '5' : Mencari_Data(); break;
+    case '6' : 
+   {
+    printf("\n\nTEKAN ENTER UNTUK KEMBALI KE PROGRAM...!");
+    getch(); exit(0);
+   }
+ }
+}
